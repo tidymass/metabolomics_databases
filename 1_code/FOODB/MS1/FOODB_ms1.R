@@ -13,9 +13,9 @@ library(readr)
 library(xml2)
 
 source("R/14_FOODB.R")
-source("R/3_utils.R")
+source("1_code/3_utils.R")
 
-setwd('other_files/FOODB/')
+setwd('2_data/FOODB/')
 
 # compound <-
 #   readr::read_csv("foodb_2020_04_07_csv/Compound.csv")
@@ -213,7 +213,7 @@ foodb_ms1 <-
 load("../HMDB/MS1/hmdb_ms1.rda")
 load("../KEGG/kegg_ms1.rda")
 
-source(here::here("R/3_utils.R"))
+source(here::here("1_code/3_utils.R"))
 
 intersect(colnames(foodb_ms1@spectra.info),
           colnames(hmdb_ms1@spectra.info))
@@ -285,7 +285,7 @@ intersect(colnames(foodb_ms1@spectra.info),
 setdiff(colnames(kegg_ms1@spectra.info),
         colnames(foodb_ms1@spectra.info))
 
-source(here::here("R/3_utils.R"))
+source(here::here("1_code/3_utils.R"))
 
 foodb_ms1 <-
   update_metid_database_info(

@@ -2,7 +2,7 @@ no_source()
 
 setwd(masstools::get_project_wd())
 rm(list = ls())
-setwd("other_files/MODELSEED/reaction/")
+setwd("2_data/MODELSEED/reaction/")
 
 library(metid)
 library(tidyverse)

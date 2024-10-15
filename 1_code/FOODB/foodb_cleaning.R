@@ -4,11 +4,11 @@ no_source()
 setwd(masstools::get_project_wd())
 rm(list = ls())
 
-source("R/3_utils.R")
+source("1_code/3_utils.R")
 
-load("other_files/source_system/source_system.rda")
+load("2_data/source_system/source_system.rda")
 
-setwd("other_files/FOODB/")
+setwd("2_data/FOODB/")
 
 library(tidyverse)
 library(tidyselect)

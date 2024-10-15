@@ -2,10 +2,10 @@
 no_source()
 setwd(masstools::get_project_wd())
 rm(list = ls())
-load("other_files/KEGG/kegg_ms1.rda")
-load("other_files/HMDB/MS1/hmdb_ms1.rda")
+load("2_data/KEGG/kegg_ms1.rda")
+load("2_data/HMDB/MS1/hmdb_ms1.rda")
 
-setwd("other_files/SNYDER/MS1/")
+setwd("2_data/SNYDER/MS1/")
 
 library(tidyverse)
 library(tidymass)
@@ -453,9 +453,9 @@ mpsnyder_hilic_ms1 <-
     threads = 3
   )
 
-load(here::here("other_files/source_system/source_system.rda"))
+load(here::here("2_data/source_system/source_system.rda"))
 
-source(here::here("R/3_utils.R"))
+source(here::here("1_code/3_utils.R"))
 
 library(tidyverse)
 library(tidyselect)

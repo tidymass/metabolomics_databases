@@ -2,8 +2,8 @@
 no_source
 rm(list = ls())
 setwd(masstools::get_project_wd())
-source("R/3_utils.R")
-setwd('other_files/T3DB')
+source("1_code/3_utils.R")
+setwd('2_data/T3DB')
 library(dplyr)
 library(ggplot2)
 library(XML)
@@ -264,7 +264,7 @@ intersect(colnames(t3db_ms1@spectra.info),
 setdiff(colnames(kegg_ms1@spectra.info),
         colnames(t3db_ms1@spectra.info))
 
-source(here::here("R/3_utils.R"))
+source(here::here("1_code/3_utils.R"))
 
 t3db_ms1 <-
   update_metid_database_info(
@@ -328,7 +328,7 @@ t3db_ms1 <-
     )
   )
 
-load(here::here("other_files/source_system/source_system.rda"))
+load(here::here("2_data/source_system/source_system.rda"))
 
 library(tidyverse)
 library(tidyselect)

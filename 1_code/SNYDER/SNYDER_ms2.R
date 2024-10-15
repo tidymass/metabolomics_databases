@@ -2,17 +2,17 @@
 no_source()
 setwd(masstools::get_project_wd())
 rm(list = ls())
-load("other_files/SNYDER/MS1/mpsnyder_hilic_ms1.rda")
-load("other_files/SNYDER/MS1/mpsnyder_rplc_ms1.rda")
+load("2_data/SNYDER/MS1/mpsnyder_hilic_ms1.rda")
+load("2_data/SNYDER/MS1/mpsnyder_rplc_ms1.rda")
 
-load("other_files/SNYDER/MS1/snyder_database_hilic0.0.3.rda")
-load("other_files/SNYDER/MS1/snyder_database_rplc0.0.3.rda")
+load("2_data/SNYDER/MS1/snyder_database_hilic0.0.3.rda")
+load("2_data/SNYDER/MS1/snyder_database_rplc0.0.3.rda")
 
-load("other_files/HMDB/MS1/hmdb_ms1.rda")
+load("2_data/HMDB/MS1/hmdb_ms1.rda")
 
-source("R/3_utils.R")
+source("1_code/3_utils.R")
 
-setwd("other_files/SNYDER/MS2/")
+setwd("2_data/SNYDER/MS2/")
 
 library(tidyverse)
 library(tidymass)
@@ -81,7 +81,7 @@ intersect(colnames(mpsnyder_hilic_ms2@spectra.info),
 setdiff(colnames(kegg_ms1@spectra.info),
         colnames(mpsnyder_hilic_ms2@spectra.info))
 
-source(here::here("R/3_utils.R"))
+source(here::here("1_code/3_utils.R"))
 
 mpsnyder_hilic_ms2 <-
   update_metid_database_info(
@@ -217,7 +217,7 @@ intersect(colnames(mpsnyder_rplc_ms2@spectra.info),
 setdiff(colnames(kegg_ms1@spectra.info),
         colnames(mpsnyder_rplc_ms2@spectra.info))
 
-source(here::here("R/3_utils.R"))
+source(here::here("1_code/3_utils.R"))
 
 mpsnyder_rplc_ms2 <-
   update_metid_database_info(

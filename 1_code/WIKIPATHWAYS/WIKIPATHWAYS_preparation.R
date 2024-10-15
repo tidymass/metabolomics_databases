@@ -1,7 +1,7 @@
 setwd(masstools::get_project_wd())
 rm(list = ls())
-source("R/3_utils.R")
-setwd("other_files/WIKIPATHWAYS/")
+source("1_code/3_utils.R")
+setwd("2_data/WIKIPATHWAYS/")
 
 library(tidyverse)
 library(xml2)

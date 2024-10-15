@@ -5,10 +5,10 @@ rm(list = ls())
 
 library(tidyverse)
 
-load("other_files/HMDB/MS1/hmdb_ms1.rda")
-load("other_files/KEGG/kegg_ms1.rda")
+load("2_data/HMDB/MS1/hmdb_ms1.rda")
+load("2_data/KEGG/kegg_ms1.rda")
 
-setwd("other_files/metabolic_network/")
+setwd("2_data/metabolic_network/")
 
 load("kegg_rpair_database_human")
 load("hmdb_rpair_database_human")

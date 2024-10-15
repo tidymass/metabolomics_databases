@@ -2,7 +2,7 @@ no_source()
 
 setwd(masstools::get_project_wd())
 rm(list = ls())
-setwd("other_files/RECON3/compound/")
+setwd("2_data/RECON3/compound/")
 
 library(metid)
 library(tidyverse)

@@ -3,7 +3,7 @@ no_source()
 setwd(masstools::get_project_wd())
 rm(list = ls())
 
-load("other_files/CHEBI/chebi_ms1.rda")
+load("2_data/CHEBI/chebi_ms1.rda")
 
 chebi_compound_data <-
   chebi_ms1@spectra.info %>%
@@ -23,7 +23,7 @@ chebi_compound_data$compound_KEGG_ID <-
   }) %>%
   unlist()
 
-setwd("other_files/RHEA/reaction/")
+setwd("2_data/RHEA/reaction/")
 
 library(metid)
 library(tidyverse)

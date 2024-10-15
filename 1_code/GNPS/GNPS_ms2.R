@@ -3,12 +3,12 @@ no_source()
 
 setwd(masstools::get_project_wd())
 rm(list = ls())
-load("other_files/HMDB/MS1/hmdb_ms1.rda")
-load("other_files/KEGG/kegg_ms1.rda")
+load("2_data/HMDB/MS1/hmdb_ms1.rda")
+load("2_data/KEGG/kegg_ms1.rda")
 source("R/read_msp_data.R")
-source("R/3_utils.R")
+source("1_code/3_utils.R")
 source("R/7_GNPS.R")
-setwd("other_files/GNPS")
+setwd("2_data/GNPS")
 
 library(tidyverse)
 library(tidymass)
@@ -1153,7 +1153,7 @@ gnps_ms2
 load("../HMDB/MS1/hmdb_ms1.rda")
 load("../KEGG/kegg_ms1.rda")
 
-source(here::here("R/3_utils.R"))
+source(here::here("1_code/3_utils.R"))
 
 intersect(colnames(gnps_ms2@spectra.info),
           colnames(kegg_ms1@spectra.info))
@@ -1161,7 +1161,7 @@ intersect(colnames(gnps_ms2@spectra.info),
 setdiff(colnames(kegg_ms1@spectra.info),
         colnames(gnps_ms2@spectra.info))
 
-source(here::here("R/3_utils.R"))
+source(here::here("1_code/3_utils.R"))
 
 gnps_ms2 <-
   update_metid_database_info(
@@ -1227,7 +1227,7 @@ gnps_ms2 <-
 
 gnps_ms2
 
-load(here::here("other_files/source_system/source_system.rda"))
+load(here::here("2_data/source_system/source_system.rda"))
 
 library(tidyverse)
 library(tidyselect)

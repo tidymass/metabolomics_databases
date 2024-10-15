@@ -14,9 +14,9 @@ library(xml2)
 
 source("R/14_FOODB.R")
 
-load("other_files/FOODB/MS1/foodb_ms1.rda")
+load("2_data/FOODB/MS1/foodb_ms1.rda")
 
-setwd('other_files/FOODB/MS2/')
+setwd('2_data/FOODB/MS2/')
 
 dir.create("ms2_data")
 

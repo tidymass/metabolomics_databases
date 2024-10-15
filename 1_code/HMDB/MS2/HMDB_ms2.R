@@ -4,8 +4,8 @@ no_source()
 
 setwd(masstools::get_project_wd())
 rm(list = ls())
-load("other_files/HMDB/MS1/hmdb_ms1.rda")
-setwd("other_files/HMDB/MS2/")
+load("2_data/HMDB/MS1/hmdb_ms1.rda")
+setwd("2_data/HMDB/MS2/")
 
 library(tidyverse)
 library(xml2)

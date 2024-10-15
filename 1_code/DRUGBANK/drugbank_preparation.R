@@ -1,9 +1,9 @@
 ###
 no_source()
 setwd(masstools::get_project_wd())
-source("R/3_utils.R")
+source("1_code/3_utils.R")
 rm(list = ls())
-setwd('other_files/DRUGBANK/')
+setwd('2_data/DRUGBANK/')
 
 library(dbparser)
 library(dplyr)
@@ -257,7 +257,7 @@ library(MetaDBparse)
 #   dplyr::mutate(From_drug = "Yes")
 #
 #
-# load(here::here("other_files/HMDB/MS1/hmdb_ms1.rda"))
+# load(here::here("2_data/HMDB/MS1/hmdb_ms1.rda"))
 #
 # idx <-
 # match(drugbank$CAS.ID, hmdb_ms1@spectra.info$CAS.ID)
@@ -307,7 +307,7 @@ drugbank_ms1 <-
 load("../HMDB/MS1/hmdb_ms1.rda")
 load("../KEGG/kegg_ms1.rda")
 
-source(here::here("R/3_utils.R"))
+source(here::here("1_code/3_utils.R"))
 
 intersect(colnames(drugbank_ms1@spectra.info),
           colnames(hmdb_ms1@spectra.info))
@@ -373,7 +373,7 @@ intersect(colnames(drugbank_ms1@spectra.info),
 setdiff(colnames(kegg_ms1@spectra.info),
         colnames(drugbank_ms1@spectra.info))
 
-source(here::here("R/3_utils.R"))
+source(here::here("1_code/3_utils.R"))
 
 drugbank_ms1 <-
   update_metid_database_info(
@@ -415,7 +415,7 @@ drugbank_ms1 <-
     )
   )
 
-load(here::here("other_files/source_system/source_system.rda"))
+load(here::here("2_data/source_system/source_system.rda"))
 
 library(tidyverse)
 library(tidyselect)

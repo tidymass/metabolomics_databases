@@ -7,9 +7,9 @@ library(tidyverse)
 library(plyr)
 library(tidyr)
 source("R/6_CHEBI.R")
-source("R/3_utils.R")
+source("1_code/3_utils.R")
 
-setwd("other_files/CHEBI/")
+setwd("2_data/CHEBI/")
 
 # # download_chebi_compound(path = ".")
 # #
@@ -350,7 +350,7 @@ intersect(colnames(chebi_ms1@spectra.info),
 setdiff(colnames(kegg_ms1@spectra.info),
         colnames(chebi_ms1@spectra.info))
 
-source(here::here("R/3_utils.R"))
+source(here::here("1_code/3_utils.R"))
 
 chebi_ms1 <-
   update_metid_database_info(
@@ -386,7 +386,7 @@ chebi_ms1 <-
     )
   )
 
-load(here::here("other_files/source_system/source_system.rda"))
+load(here::here("2_data/source_system/source_system.rda"))
 
 library(tidyverse)
 library(tidyselect)

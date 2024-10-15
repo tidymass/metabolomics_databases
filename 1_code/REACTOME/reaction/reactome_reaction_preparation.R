@@ -4,7 +4,7 @@ setwd(masstools::get_project_wd())
 rm(list = ls())
 source("R/read_sbml_data.R")
 source("R/19_REACTOME.R")
-setwd("other_files/REACTOME/reaction/")
+setwd("2_data/REACTOME/reaction/")
 
 library(metid)
 library(tidyverse)

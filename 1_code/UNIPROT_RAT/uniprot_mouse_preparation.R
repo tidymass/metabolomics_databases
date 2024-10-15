@@ -1,7 +1,7 @@
 no_source()
 setwd(masstools::get_project_wd())
 rm(list = ls())
-setwd("other_files/UNIPROT_MOUSE/")
+setwd("2_data/UNIPROT_MOUSE/")
 library(jsonlite)
 library(rjson)
 library(tidyverse)

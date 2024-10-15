@@ -5,7 +5,7 @@ rm(list = ls())
 source("R/read_sbml_data.R")
 source("R/19_REACTOME.R")
 
-load("other_files/CHEBI/chebi_ms1.rda")
+load("2_data/CHEBI/chebi_ms1.rda")
 
 chebi_compound_data <-
   chebi_ms1@spectra.info %>%
@@ -25,7 +25,7 @@ chebi_compound_data$compound_KEGG_ID <-
   }) %>%
   unlist()
 
-setwd("other_files/REACTOME/reaction/")
+setwd("2_data/REACTOME/reaction/")
 
 load("reactome_reaction_human_database")
 

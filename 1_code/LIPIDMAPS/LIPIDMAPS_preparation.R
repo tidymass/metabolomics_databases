@@ -3,9 +3,9 @@ no_source()
 setwd(masstools::get_project_wd())
 rm(list = ls())
 
-source("R/3_utils.R")
+source("1_code/3_utils.R")
 
-setwd('other_files/LIPIDMAPS/')
+setwd('2_data/LIPIDMAPS/')
 
 library(dplyr)
 library(ggplot2)
@@ -178,7 +178,7 @@ lipidmaps_ms1 =
 load("../HMDB/MS1/hmdb_ms1.rda")
 load("../KEGG/kegg_ms1.rda")
 
-source(here::here("R/3_utils.R"))
+source(here::here("1_code/3_utils.R"))
 
 intersect(colnames(lipidmaps_ms1@spectra.info),
           colnames(hmdb_ms1@spectra.info))
@@ -244,7 +244,7 @@ intersect(colnames(lipidmaps_ms1@spectra.info),
 setdiff(colnames(kegg_ms1@spectra.info),
         colnames(lipidmaps_ms1@spectra.info))
 
-source(here::here("R/3_utils.R"))
+source(here::here("1_code/3_utils.R"))
 
 lipidmaps_ms1 <-
   update_metid_database_info(
@@ -310,7 +310,7 @@ lipidmaps_ms1 <-
 lipidmaps_ms1
 
 
-load(here::here("other_files/source_system/source_system.rda"))
+load(here::here("2_data/source_system/source_system.rda"))
 
 library(tidyverse)
 library(tidyselect)

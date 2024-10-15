@@ -1,7 +1,7 @@
 setwd(masstools::get_project_wd())
 rm(list = ls())
 
-setwd("other_files/METANETX/compound/")
+setwd("2_data/METANETX/compound/")
 
 library(tidyverse)
 library(xml2)

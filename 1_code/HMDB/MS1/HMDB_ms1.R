@@ -1,8 +1,8 @@
 setwd(masstools::get_project_wd())
 rm(list = ls())
 
-source("R/3_utils.R")
-setwd("other_files/HMDB/MS1/")
+source("1_code/3_utils.R")
+setwd("2_data/HMDB/MS1/")
 
 library(tidyverse)
 library(xml2)
@@ -239,7 +239,7 @@ hmdb_ms1 <-
 hmdb_ms1@spectra.info$mz <-
 hmdb_ms1@spectra.info$monisotopic_molecular_weight
 
-load(here::here("other_files/source_system/source_system.rda"))
+load(here::here("2_data/source_system/source_system.rda"))
 
 library(tidyverse)
 library(tidyselect)

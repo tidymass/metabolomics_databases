@@ -3,7 +3,7 @@ no_source()
 setwd(masstools::get_project_wd())
 rm(list = ls())
 
-setwd("other_files/METANETX/reaction/")
+setwd("2_data/METANETX/reaction/")
 
 library(tidyverse)
 library(xml2)

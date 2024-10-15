@@ -5,24 +5,24 @@ library(metid)
 
 ####load data
 ####BIGG
-load("other_files/BIGG/bigg_ms1.rda")
+load("2_data/BIGG/bigg_ms1.rda")
 bigg_ms1
 
 ###blood exposome
-load("other_files/BLOODEXPOSOME/bloodexposome_ms1.rda")
+load("2_data/BLOODEXPOSOME/bloodexposome_ms1.rda")
 bloodexposome_ms1
 
 ###CHEBI
-load("other_files/CHEBI/chebi_ms1.rda")
+load("2_data/CHEBI/chebi_ms1.rda")
 chebi_ms1
 
 ###DrugBnak
-load("other_files/DRUGBANK/drugbank_ms1.rda")
+load("2_data/DRUGBANK/drugbank_ms1.rda")
 
 drugbank_ms1
 
 ###FOODB
-load("other_files/FOODB/foodb_ms1.rda")
+load("2_data/FOODB/foodb_ms1.rda")
 
 foodb_ms1
 
@@ -30,64 +30,64 @@ foodb_ms1@spectra.info$From_food <- "Yes"
 foodb_ms1@spectra.info$From_food
 
 ###GNPS
-load("other_files/GNPS/gnps_ms2.rda")
+load("2_data/GNPS/gnps_ms2.rda")
 
 gnps_ms2
 
 ###HMDB
-load("other_files/HMDB/MS1/hmdb_ms1.rda")
+load("2_data/HMDB/MS1/hmdb_ms1.rda")
 
 hmdb_ms1
 
-load("other_files/HMDB/MS2/hmdb_ms2.rda")
+load("2_data/HMDB/MS2/hmdb_ms2.rda")
 
 hmdb_ms2
 
 ###KEGG
-load("other_files/KEGG/kegg_ms1.rda")
+load("2_data/KEGG/kegg_ms1.rda")
 
 kegg_ms1
 
 ###LIPIDBANKS
-load("other_files/LIPIDBANK/lipidbank_ms1.rda")
+load("2_data/LIPIDBANK/lipidbank_ms1.rda")
 
 lipidbank_ms1
 
 ###LIPIDMAPS
-load("other_files/LIPIDMAPS/lipidmaps_ms1.rda")
+load("2_data/LIPIDMAPS/lipidmaps_ms1.rda")
 
 lipidmaps_ms1
 
 ###MASSBANK
-load("other_files/MASSBANK/massbank_ms2.rda")
+load("2_data/MASSBANK/massbank_ms2.rda")
 
 massbank_ms2
 
 ###METLIN
-load("other_files/METLIN/metlin_ms2.rda")
+load("2_data/METLIN/metlin_ms2.rda")
 
 metlin_ms2
 
 ###MONA
-load("other_files/MONA/mona_ms2.rda")
+load("2_data/MONA/mona_ms2.rda")
 
 mona_ms2
 
 ###NIST
-load("other_files/NIST/nist_ms2.rda")
+load("2_data/NIST/nist_ms2.rda")
 
 nist_ms2
 
 ###T3DB
-load("other_files/T3DB/t3db_ms1.rda")
+load("2_data/T3DB/t3db_ms1.rda")
 
 t3db_ms1
 
 ###SNYDER
-load("other_files/SNYDER/MS2/mpsnyder_rplc_ms2.rda")
+load("2_data/SNYDER/MS2/mpsnyder_rplc_ms2.rda")
 mpsnyder_rplc_ms2
 
-load("other_files/SNYDER/MS2/mpsnyder_hilic_ms2.rda")
+load("2_data/SNYDER/MS2/mpsnyder_hilic_ms2.rda")
 mpsnyder_hilic_ms2
 
 
@@ -473,5 +473,5 @@ source_system <-
 dim(source_system)
 
 setwd(masstools::get_project_wd())
-setwd("other_files/source_system/")
+setwd("2_data/source_system/")
 save(source_system, file = "source_system.rda")

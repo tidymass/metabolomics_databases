@@ -3,7 +3,7 @@
 no_source()
 setwd(masstools::get_project_wd())
 rm(list = ls())
-setwd("other_files/UNIPROT_RAT/")
+setwd("2_data/UNIPROT_RAT/")
 library(jsonlite)
 library(rjson)
 library(tidyverse)

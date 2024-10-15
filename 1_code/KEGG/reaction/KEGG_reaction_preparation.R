@@ -2,7 +2,7 @@ no_source()
 
 setwd(masstools::get_project_wd())
 rm(list = ls())
-setwd("other_files/KEGG")
+setwd("2_data/KEGG")
 
 library(metid)
 library(tidyverse)

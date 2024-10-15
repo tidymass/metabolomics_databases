@@ -3,13 +3,13 @@ no_source()
 setwd(masstools::get_project_wd())
 rm(list = ls())
 
-load("other_files/HMDB/MS1/hmdb_ms1.rda")
-load("other_files/KEGG/kegg_ms1.rda")
+load("2_data/HMDB/MS1/hmdb_ms1.rda")
+load("2_data/KEGG/kegg_ms1.rda")
 
 ###metanetx rpair database
-load("other_files/METANETX/reaction/metanetx_rpair_database")
+load("2_data/METANETX/reaction/metanetx_rpair_database")
 
-setwd("other_files/metabolic_network/")
+setwd("2_data/metabolic_network/")
 
 metanetx_rpair_database <-
   metanetx_rpair_database %>%

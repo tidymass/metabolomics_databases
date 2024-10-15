@@ -5,9 +5,9 @@ rm(list = ls())
 
 library(tidyverse)
 
-source("other_files/tools.R")
+source("2_data/tools.R")
 
-setwd("other_files/metabolic_network/")
+setwd("2_data/metabolic_network/")
 
 load("metabolic_network_with_protein")
 

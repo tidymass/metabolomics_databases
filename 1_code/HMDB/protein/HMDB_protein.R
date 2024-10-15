@@ -1,8 +1,8 @@
 setwd(masstools::get_project_wd())
 rm(list = ls())
 
-source("R/3_utils.R")
-setwd("other_files/HMDB/protein/")
+source("1_code/3_utils.R")
+setwd("2_data/HMDB/protein/")
 
 library(tidyverse)
 library(xml2)
