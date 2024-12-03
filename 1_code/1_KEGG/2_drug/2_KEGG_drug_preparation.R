@@ -183,36 +183,16 @@ kegg_drug$Compound.name =
 kegg_drug[which(kegg_drug == "", arr.ind = TRUE)] <- NA
 
 
-dim(kegg_metabolite)
+dim(kegg_drug)
 # dim(kegg_drug)
 
-kegg_metabolite[which(kegg_metabolite == "", arr.ind = TRUE)] <- NA
-# kegg_drug[which(kegg_drug == "", arr.ind = TRUE)] <- NA
-#
-# kegg_drug.id <-
-# kegg_metabolite %>%
-#   dplyr::filter(!is.na(KEGG_DRUG.ID)) %>%
-#   dplyr::pull(KEGG_DRUG.ID) %>%
-#   stringr::str_split("\\{\\}") %>%
-#   unlist() %>%
-#   unique()
-#
-# kegg_drug <-
-#   kegg_drug %>%
-#   dplyr::filter(!KEGG_DRUG.ID %in% kegg_drug.id)
-#
-# kegg.id <-
-# kegg_drug$KEGG.ID[!is.na(kegg_drug$KEGG.ID)]
-#
-# kegg_metabolite <-
-# kegg_metabolite %>%
-#   dplyr::filter(!KEGG.ID %in% kegg.id)
+kegg_drug[which(kegg_drug == "", arr.ind = TRUE)] <- NA
+ 
+kegg_drug$From_human
+kegg_drug$From_drug
 
-kegg_metabolite$From_human
-kegg_metabolite$From_drug
-
-kegg_metabolite <-
-kegg_metabolite %>%
+kegg_drug <-
+kegg_drug %>%
     dplyr::rename(
         from_human = From_human,
         from_drug = From_drug
@@ -232,29 +212,20 @@ kegg_metabolite %>%
         from_which_drug = NA
     )
 
-kegg_metabolite$from_human
-kegg_metabolite$from_drug
+kegg_drug$from_human
+kegg_drug$from_drug
 
-# sum(kegg_metabolite$From_drug == "Yes")
-# sum(kegg_drug$From_human == "Yes")
-# sum(kegg_drug$From_drug == "Yes")
+colnames(kegg_drug)
 
-colnames(kegg_metabolite)
-# colnames(kegg_drug)
-
-# kegg_ms1 <-
-#   rbind(kegg_metabolite,
-#         kegg_drug)
-
-openxlsx::write.xlsx(kegg_metabolite, file = "kegg_metabolite.xlsx", asTable = TRUE, overwrite = TRUE)
+openxlsx::write.xlsx(kegg_drug, file = "kegg_drug.xlsx", asTable = TRUE, overwrite = TRUE)
 
 library(metid)
 
-kegg_metabolite_ms1 <-
+kegg_drug_ms1 <-
     construct_database(
         path = ".",
         version = "2022-04-08",
-        metabolite.info.name = "kegg_metabolite.xlsx",
+        metabolite.info.name = "kegg_drug.xlsx",
         source = "KEGG",
         link = "https://www.genome.jp/kegg",
         creater = "Xiaotao Shen",
@@ -262,6 +233,8 @@ kegg_metabolite_ms1 <-
         rt = FALSE,
         threads = 3
     )
+
+save(kegg_drug_ms1, file = "kegg_drug_ms1.rda")
 
 # load("../HMDB/MS1/hmdb_ms1.rda")
 

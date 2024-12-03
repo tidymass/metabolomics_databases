@@ -18,11 +18,32 @@ library(KEGGREST)
 library(tidyverse)
 
 ### load data
+kegg_metabolite <- readxl::read_xlsx("3_data_analysis/KEGG/metabolite/kegg_metabolite.xlsx")
+kegg_drug <- readxl::read_xlsx("3_data_analysis/KEGG/drug/kegg_drug.xlsx")
 
-load("2_data/KEGG/metabolite/kegg_compound_database")
+dir.create("3_data_analysis/KEGG/compound", showWarnings = FALSE)
 
-dir.create("3_data_analysis/KEGG/metabolite", showWarnings = FALSE)
-setwd("3_data_analysis/KEGG/metabolite")
+setwd("3_data_analysis/KEGG/compound")
+
+colnames(kegg_metabolite)
+colnames(kegg_drug)
+
+dim(kegg_metabolite)
+dim(kegg_drug)
+
+colnames(kegg_metabolite) == colnames(kegg_drug)
+
+intersect_kegg_id <-
+intersect(kegg_metabolite$KEGG.ID,
+kegg_drug$KEGG.ID)
+
+intersect_kegg_id[1]   
+
+rbind(
+    dplyr::filter(kegg_metabolite, KEGG.ID %in% intersect_kegg_id[1]),
+dplyr::filter(kegg_drug, KEGG.ID %in% intersect_kegg_id[1])
+)
+
 
 kegg_compound_database %>%
     lapply(function(x) {
