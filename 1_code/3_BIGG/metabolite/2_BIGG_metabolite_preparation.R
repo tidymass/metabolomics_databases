@@ -9,14 +9,14 @@ source('1_code/100_tools.R')
 ###read data
 library(massdatabase)
 
-bigg_metabolites <-
+bigg_compounds <-
 read_bigg_universal_metabolite(path = "2_data/BIGG/metabolite")
 
-dir.create("3_data_analysis/BIGG/metabolite", showWarnings = FALSE)
-setwd("3_data_analysis/BIGG/metabolite")
+dir.create("3_data_analysis/BIGG/compound", showWarnings = FALSE)
+setwd("3_data_analysis/BIGG/compound")
 
 ###convert it to metID compound database
-class(bigg_metabolites)
+class(bigg_compounds)
 
 ####source
 ####from_human TRUE FALSE
@@ -44,7 +44,7 @@ class(bigg_metabolites)
 #######from_food TRUE FALSE
 #######from_which_food Tomato
 
-convert_bigg_universal2metid(data = bigg_metabolites, 
+convert_bigg_universal2metid(data = bigg_compounds, 
 path = ".", 
 threads = 5)
 
@@ -210,12 +210,14 @@ dplyr::left_join(source, by = "Lab.ID")
 bigg_ms1@spectra.info <-
 spectra_info
 
-save(bigg_ms1, file = "bigg_ms1.RData")
+bigg_compound_ms1 <-
+bigg_ms1
 
+save(bigg_compound_ms1, file = "bigg_compound_ms1.rda")
 
-spectra_info %>% 
-dplyr::count(Lab.ID) %>% 
-dplyr::filter(n > 1)
+# spectra_info %>% 
+# dplyr::count(Lab.ID) %>% 
+# dplyr::filter(n > 1)
 
-spectra_info %>% 
-dplyr::filter(Lab.ID == "Pald")
+# spectra_info %>% 
+# dplyr::filter(Lab.ID == "Pald")

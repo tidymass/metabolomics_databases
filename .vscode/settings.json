@@ -1,5 +1,7 @@
 {
     "cSpell.words": [
+        "bigg",
+        "BLOODEXPOSOME",
         "CHEBI",
         "CHEMBL",
         "creater",
@@ -13,14 +15,17 @@
         "KEGGREST",
         "LIPIDBANK",
         "LIPIDMAPS",
+        "massdatabase",
         "masstools",
         "metid",
+        "monisotopic",
         "openxlsx",
         "PUBCHEM",
         "purrr",
         "readxl",
         "Shen",
         "stringr",
+        "tidymass",
         "tidyverse",
         "Xiaotao"
     ]

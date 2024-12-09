@@ -197,16 +197,6 @@ kegg_drug %>%
         from_human = From_human,
         from_drug = From_drug
     ) %>%
-    dplyr::mutate(from_human = case_when(
-        from_human == "Yes" ~ TRUE,
-        from_human == "No" ~ FALSE,
-        TRUE ~ NA
-    )) %>%
-    dplyr::mutate(from_drug = case_when(
-        from_drug == "Yes" ~ TRUE,
-        from_drug == "No" ~ FALSE,
-        TRUE ~ NA
-    )) %>%
     dplyr::mutate(
         from_which_part = NA,
         from_which_drug = NA

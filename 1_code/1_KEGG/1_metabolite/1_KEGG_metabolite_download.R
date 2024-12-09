@@ -38,7 +38,6 @@ setwd("2_data/KEGG/metabolite")
 load("kegg_compound_database")
 
 
-
 # drug_ID <-
 #   keggList(database = "drug") %>%
 #   names() %>%

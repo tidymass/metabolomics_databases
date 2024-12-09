@@ -1,10 +1,10 @@
-####HMDB database: https://hmdb.ca/
+#### HMDB database: https://hmdb.ca/
 setwd(masstools::get_project_wd())
 rm(list = ls())
 
 source("1_code/3_utils.R")
 
-###load data
+### load data
 
 load("2_data/HMDB/MS1/hmdb_metabolite.rda")
 
@@ -17,8 +17,8 @@ library(stringr)
 
 dim(hmdb_metabolite)
 
-hmdb_metabolite <-
-  hmdb_metabolite %>%
+# Filter out rows with missing values in the 'monisotopic_molecular_weight' column
+hmdb_metabolite <- hmdb_metabolite %>%
   dplyr::filter(!is.na(monisotopic_molecular_weight))
 
 hmdb_metabolite[which(hmdb_metabolite == "", arr.ind = TRUE)] <- NA
@@ -82,39 +82,50 @@ hmdb_metabolite <-
     everything()
   )
 
-load("../../KEGG/kegg_ms1.rda")
+load("../../KEGG/compound/kegg_compound_ms1.rda")
 
 idx1 <-
   match(hmdb_metabolite$CAS.ID,
-        kegg_ms1@spectra.info$CAS.ID,
-        incomparables = NA)
+    kegg_compound_ms1@spectra.info$CAS.ID,
+    incomparables = NA
+  )
 
 idx2 <-
   match(hmdb_metabolite$KEGG.ID,
-        kegg_ms1@spectra.info$KEGG.ID,
-        incomparables = NA)
+    kegg_compound_ms1@spectra.info$KEGG.ID,
+    incomparables = NA
+  )
 
 idx <-
   data.frame(idx1, idx2) %>%
   keep_one_from_multiple()
 
 KEGG.ID <-
-  data.frame(hmdb_metabolite$KEGG.ID, kegg_ms1@spectra.info$KEGG.ID[idx]) %>%
+  data.frame(hmdb_metabolite$KEGG.ID, kegg_compound_ms1@spectra.info$KEGG.ID[idx]) %>%
   keep_one_from_multiple()
+
 hmdb_metabolite$KEGG.ID <- KEGG.ID
 
 CAS.ID <-
-  data.frame(hmdb_metabolite$CAS.ID, kegg_ms1@spectra.info$CAS.ID[idx]) %>%
+  data.frame(hmdb_metabolite$CAS.ID, kegg_compound_ms1@spectra.info$CAS.ID[idx]) %>%
   keep_one_from_multiple()
+
 hmdb_metabolite$CAS.ID <- CAS.ID
 
+hmdb_metabolite <-
+  hmdb_metabolite %>%
+  dplyr::rename(from_human = From_human) %>%
+  dplyr::mutate(from_human = "Yes") %>%
+  dplyr::mutate(from_which_part = "Unknown")
+
 openxlsx::write.xlsx(hmdb_metabolite,
-                     file = "hmdb_metabolite.xlsx",
-                     asTable = TRUE, overwrite = TRUE)
+  file = "hmdb_metabolite.xlsx",
+  asTable = TRUE, overwrite = TRUE
+)
 
 library(metid)
 
-hmdb_ms1 <-
+hmdb_compound_ms1 <-
   construct_database(
     path = ".",
     version = "2022-04-11",
@@ -127,21 +138,21 @@ hmdb_ms1 <-
     threads = 3
   )
 
-hmdb_ms1@spectra.info$mz <-
-hmdb_ms1@spectra.info$monisotopic_molecular_weight
+hmdb_compound_ms1@spectra.info$mz <-
+  hmdb_compound_ms1@spectra.info$monisotopic_molecular_weight
 
-load(here::here("2_data/source_system/source_system.rda"))
+# load(here::here("2_data/source_system/source_system.rda"))
 
-library(tidyverse)
-library(tidyselect)
-library(metid)
+# library(tidyverse)
+# library(tidyselect)
+# library(metid)
 
-hmdb_ms1 <-
-  update_metid_database_source_system(
-    database = hmdb_ms1,
-    source_system = source_system,
-    by = c("CAS.ID", "HMDB.ID", "KEGG.ID"),
-    prefer = "database"
-  )
+# hmdb_compound_ms1 <-
+#   update_metid_database_source_system(
+#     database = hmdb_compound_ms1,
+#     source_system = source_system,
+#     by = c("CAS.ID", "HMDB.ID", "KEGG.ID"),
+#     prefer = "database"
+#   )
 
-save(hmdb_ms1, file = "hmdb_ms1.rda")
+save(hmdb_compound_ms1, file = "hmdb_compound_ms1.rda")

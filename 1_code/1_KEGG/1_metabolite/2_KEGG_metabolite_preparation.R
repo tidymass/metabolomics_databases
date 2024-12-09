@@ -390,16 +390,6 @@ kegg_metabolite %>%
         from_human = From_human,
         from_drug = From_drug
     ) %>%
-    dplyr::mutate(from_human = case_when(
-        from_human == "Yes" ~ TRUE,
-        from_human == "No" ~ FALSE,
-        TRUE ~ NA
-    )) %>%
-    dplyr::mutate(from_drug = case_when(
-        from_drug == "Yes" ~ TRUE,
-        from_drug == "No" ~ FALSE,
-        TRUE ~ NA
-    )) %>%
     dplyr::mutate(
         from_which_part = NA,
         from_which_drug = NA
@@ -408,9 +398,7 @@ kegg_metabolite %>%
 kegg_metabolite$from_human
 kegg_metabolite$from_drug
 
-# sum(kegg_metabolite$From_drug == "Yes")
-# sum(kegg_drug$From_human == "Yes")
-# sum(kegg_drug$From_drug == "Yes")
+sum(kegg_metabolite$From_drug == "Yes")
 
 colnames(kegg_metabolite)
 # colnames(kegg_drug)
@@ -426,7 +414,7 @@ library(metid)
 kegg_metabolite_ms1 <-
     construct_database(
         path = ".",
-        version = "2022-10-22",
+        version = "2024-12-05",
         metabolite.info.name = "kegg_metabolite.xlsx",
         source = "KEGG",
         link = "https://www.genome.jp/kegg",

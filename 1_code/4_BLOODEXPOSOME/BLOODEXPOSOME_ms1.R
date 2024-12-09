@@ -3,66 +3,68 @@ no_source()
 setwd(masstools::get_project_wd())
 rm(list = ls())
 
-load("2_data/KEGG/kegg_ms1.rda")
-load("2_data/HMDB/MS1/hmdb_ms1.rda")
+load("3_data_analysis/KEGG/compound/kegg_compound_ms1.rda")
+load("3_data_analysis/HMDB/MS1/hmdb_compound_ms1.rda")
+
 source("1_code/3_utils.R")
-setwd("2_data/BLOODEXPOSOME/")
+
+data <- readxl::read_xlsx("2_data/BLOODEXPOSOME/BloodExpsomeDatabase_version_1.0.xlsx")
+
+dir.create("3_data_analysis/BLOODEXPOSOME", showWarnings = FALSE)
+setwd("3_data_analysis/BLOODEXPOSOME")
 
 library(tidyverse)
 library(tidymass)
 
-# data <- readxl::read_xlsx("BloodExpsomeDatabase_version_1.0.xlsx")
-#
-# data <-
-# data %>%
-#   dplyr::rename(
-#     PUBCHEM.ID = "PubChem CID",
-#     Compound.name = "Compound Name",
-#     KEGG.ID = "KEGG ID",
-#     HMDB.ID = "HMDB ID",
-#     Formula = "Molecular Formula",
-#     SMILES.ID = CanonicalSMILES,
-#     INCHIKEY.ID = InChIKey,
-#     mz = ExactMass
-#   ) %>%
-#   dplyr::select(PUBCHEM.ID:BloodPaperCount)
-#
-# sum(is.na(data$KEGG.ID))
-# sum(is.na(data$HMDB.ID))
-#
-#
-# data$KEGG.ID <-
-# data$KEGG.ID %>%
-#   stringr::str_split(pattern = ";") %>%
-#   purrr::map(function(x){
-#     if(is.na(x)[1]){
-#       return(NA)
-#     }
-#     paste(x, collapse = "{}")
-#   }) %>%
-#   unlist()
-#
-# data$HMDB.ID <-
-#   data$HMDB.ID %>%
-#   stringr::str_split(pattern = ";") %>%
-#   purrr::map(function(x){
-#     if(is.na(x)[1]){
-#       return(NA)
-#     }
-#     paste(x, collapse = "{}")
-#   }) %>%
-#   unlist()
-#
-# data <-
-# data %>%
-#   dplyr::left_join(kegg_ms1@spectra.info[,c("KEGG.ID", "From_human", "From_drug")],
-#                    by = "KEGG.ID",
-#                    na_matches = "never") %>%
-#   dplyr::left_join(hmdb_ms1@spectra.info[,c("HMDB.ID", "From_human")],
-#                    by = "HMDB.ID",
-#                    na_matches = "never")
-#
-#
+data <-
+data %>%
+  dplyr::rename(
+    PUBCHEM.ID = "PubChem CID",
+    Compound.name = "Compound Name",
+    KEGG.ID = "KEGG ID",
+    HMDB.ID = "HMDB ID",
+    Formula = "Molecular Formula",
+    SMILES.ID = CanonicalSMILES,
+    INCHIKEY.ID = InChIKey,
+    mz = ExactMass
+  ) %>%
+  dplyr::select(PUBCHEM.ID:BloodPaperCount)
+
+sum(is.na(data$KEGG.ID))
+sum(is.na(data$HMDB.ID))
+
+data$KEGG.ID <-
+data$KEGG.ID %>%
+  stringr::str_split(pattern = ";") %>%
+  purrr::map(function(x){
+    if(is.na(x)[1]){
+      return(NA)
+    }
+    paste(x, collapse = "{}")
+  }) %>%
+  unlist()
+
+data$HMDB.ID <-
+  data$HMDB.ID %>%
+  stringr::str_split(pattern = ";") %>%
+  purrr::map(function(x){
+    if(is.na(x)[1]){
+      return(NA)
+    }
+    paste(x, collapse = "{}")
+  }) %>%
+  unlist()
+
+data <-
+data %>%
+  dplyr::left_join(kegg_compound_ms1@spectra.info[,c("KEGG.ID", "from_human", "from_which_part","from_drug", "from_which_drug")],
+                   by = "KEGG.ID",
+                   na_matches = "never") %>%
+  dplyr::left_join(hmdb_compound_ms1@spectra.info[,c("HMDB.ID", "from_human", "from_which_part")],
+                   by = "HMDB.ID",
+                   na_matches = "never")
+
+
 # data$From_human <-
 # data[,c("From_human.x", "From_human.y")] %>%
 #   apply(1, function(x){
@@ -77,13 +79,29 @@ library(tidymass)
 #       return(x)
 #     }
 #   })
-#
-#
-# data <-
-#   data %>%
-#   dplyr::select(-c(From_human.x, From_human.y, XLogP))
-#
-# openxlsx::write.xlsx(data, file = "bloodexposome.xlsx", asTable = TRUE)
+
+
+data$from_human <-
+data[,c("from_human.x", "from_human.y")] %>%
+  apply(1, function(x){
+    x <- as.character(x)
+    x <- x[!is.na(x)]
+    if(length(x) == 0){
+      return(NA)
+    }
+    if(length(x) == 2){
+      return(any(as.character(x)))
+    }else{
+      return(x)
+    }
+  })
+
+
+data <-
+  data %>%
+  dplyr::select(-c(From_human.x, From_human.y, XLogP))
+
+openxlsx::write.xlsx(data, file = "bloodexposome.xlsx", asTable = TRUE)
 
 bloodexposome_ms1 <-
   construct_database(
@@ -100,19 +118,19 @@ bloodexposome_ms1 <-
 
 bloodexposome_ms1
 
-load("../HMDB/MS1/hmdb_ms1.rda")
-load("../KEGG/kegg_ms1.rda")
+load("../HMDB/MS1/hmdb_compound_ms1.rda")
+load("../KEGG/kegg_compound_ms1.rda")
 
 intersect(colnames(bloodexposome_ms1@spectra.info),
-          colnames(hmdb_ms1@spectra.info))
+          colnames(hmdb_compound_ms1@spectra.info))
 
-setdiff(colnames(hmdb_ms1@spectra.info),
+setdiff(colnames(hmdb_compound_ms1@spectra.info),
         colnames(bloodexposome_ms1@spectra.info))
 
 bloodexposome_ms1 <-
   update_metid_database_info(
     database = bloodexposome_ms1,
-    ref_database = hmdb_ms1,
+    ref_database = hmdb_compound_ms1,
     by = c(
       "PUBCHEM.ID",
       "Compound.name",
@@ -167,9 +185,9 @@ bloodexposome_ms1 <-
   )
 
 intersect(colnames(bloodexposome_ms1@spectra.info),
-          colnames(kegg_ms1@spectra.info))
+          colnames(kegg_compound_ms1@spectra.info))
 
-setdiff(colnames(kegg_ms1@spectra.info),
+setdiff(colnames(kegg_compound_ms1@spectra.info),
         colnames(bloodexposome_ms1@spectra.info))
 
 source(here::here("1_code/3_utils.R"))
@@ -177,7 +195,7 @@ source(here::here("1_code/3_utils.R"))
 bloodexposome_ms1 <-
   update_metid_database_info(
     database = bloodexposome_ms1,
-    ref_database = kegg_ms1,
+    ref_database = kegg_compound_ms1,
     by = c(
       "Compound.name",
       "CAS.ID",
