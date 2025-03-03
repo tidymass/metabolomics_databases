@@ -12,8 +12,7 @@
 #' @export
 
 convert_species2source <-
-  function(x,
-           match_table) {
+  function(x, match_table) {
     if (is.na(x)) {
       return(
         data.frame(
@@ -32,16 +31,16 @@ convert_species2source <-
         )
       )
     }
-
+    
     x <-
       stringr::str_split(x, "\\{\\}")[[1]]
-
+    
     match_table <-
       as.data.frame(match_table)
     x <-
       as.character(match_table[, 2])[match(x, as.character(match_table[, 1]))]
     x <- x[!is.na(x)]
-
+    
     if (length(x) == 0) {
       return(
         data.frame(
@@ -61,7 +60,7 @@ convert_species2source <-
         )
       )
     }
-
+    
     ###
     From_human = "No"
     From_animal = "No"
@@ -76,74 +75,74 @@ convert_species2source <-
     From_eukaryota = "No"
     From_virus = "No"
     From_other = "Yes"
-
+    
     if (any(x == "Human")) {
       From_human <- "Yes"
       From_other = "No"
     }
-
+    
     if (any(x == "Animalia")) {
       From_animal <- "Yes"
       From_other = "No"
     }
-
+    
     if (any(x == "Plantae") |
         any(x == "Archaeplastida") | any(x == "Viridiplantae")) {
       From_plant <- "Yes"
       From_other = "No"
     }
-
+    
     if (any(x == "Bacteria")) {
       From_microbiota <- "Yes"
       From_bacteria <- "Yes"
       From_other = "No"
     }
-
+    
     if (any(x == "Fungi")) {
       From_microbiota <- "Yes"
       From_fungi <- "Yes"
       From_other = "No"
     }
-
+    
     if (any(x == "Archaea")) {
       From_microbiota <- "Yes"
       From_archaea <- "Yes"
       From_other = "No"
     }
-
-
+    
+    
     if (any(x == "Eukaryota")) {
       From_eukaryota <- "Yes"
       From_other = "No"
     }
-
+    
     if (any(x == "Food")) {
       From_food <- "Yes"
       From_other = "No"
     }
-
+    
     if (any(x == "Environment")) {
       From_environment <- "Yes"
       From_other = "No"
     }
-
+    
     if (any(x == "Virus")) {
       From_virus <- "Yes"
       From_other = "No"
     }
-
+    
     if (any(x == "Drug")) {
       From_drug <- "Yes"
       From_other = "No"
     }
-
-
+    
+    
     if (any(x == "Food_plant")) {
       From_food <- "Yes"
       From_plant <- "Yes"
       From_other = "No"
     }
-
+    
     data.frame(
       From_human = From_human,
       From_animal = From_animal,
@@ -251,10 +250,9 @@ show_progresser <-
         length.out = length(progresser)
       ) %>%
       round()
-
-    data.frame(idx = idx,
-               progresser = paste0(progresser, "%"))
-
+    
+    data.frame(idx = idx, progresser = paste0(progresser, "%"))
+    
   }
 
 
@@ -300,36 +298,32 @@ standard_hmdb_id <-
 update_metid_database_info <-
   function(database,
            ref_database,
-           by = c("CAS.ID",
-                  "HMDB.ID",
-                  "KEGG.ID"),
+           by = c("CAS.ID", "HMDB.ID", "KEGG.ID"),
            combine_columns = c("CAS.ID", "HMDB.ID", "KEGG.ID", "PUBCHEM.ID"),
            new_columns = c("Kingdom", "Super_class", "Class", "Sub_class")) {
     all_names <- c(by, combine_columns) %>%
       unique()
     if (any(!all_names %in% colnames(database@spectra.info))) {
-      stop(paste(all_names[which(!all_names %in% colnames(database@spectra.info))], collapse = ", "),
-           " are not in database.")
+      stop(paste(all_names[which(!all_names %in% colnames(database@spectra.info))], collapse = ", "), " are not in database.")
     }
-
+    
     if (any(!all_names %in% colnames(ref_database@spectra.info))) {
-      stop(paste(all_names[which(!all_names %in% colnames(ref_database@spectra.info))], collapse = ", "),
-           " are not in ref_database.")
+      stop(paste(all_names[which(!all_names %in% colnames(ref_database@spectra.info))], collapse = ", "), " are not in ref_database.")
     }
-
+    
     if (any(!new_columns %in% colnames(ref_database@spectra.info))) {
       stop(paste(new_columns[which(!new_columns %in% colnames(ref_database@spectra.info))], collapse = ", "),
            " are not in ref_database.")
     }
-
+    
     database@spectra.info <-
       database@spectra.info %>%
       as.data.frame()
-
+    
     ref_database@spectra.info <-
       ref_database@spectra.info %>%
       as.data.frame()
-
+    
     idx <-
       by %>%
       purrr::map(function(x) {
@@ -338,33 +332,32 @@ update_metid_database_info <-
               incomparables = NA)
       }) %>%
       dplyr::bind_cols()
-
+    
     idx <-
       idx %>%
       keep_one_from_multiple %>%
       as.numeric()
-
+    
     ###combine columns
     message("Combining columns...")
     for (x in combine_columns) {
       value <-
-        data.frame(database@spectra.info[, x],
-                   ref_database@spectra.info[idx, x]) %>%
+        data.frame(database@spectra.info[, x], ref_database@spectra.info[idx, x]) %>%
         keep_one_from_multiple()
       database@spectra.info[, x] <- value
     }
     message("Done.")
-
-
+    
+    
     ###new columns
     if (!is.null(new_columns)) {
       if (length(new_columns) > 0) {
         message("Adding new columns...")
-
+        
         database@spectra.info <-
           database@spectra.info %>%
           dplyr::select(!dplyr::one_of(new_columns))
-
+        
         for (x in new_columns) {
           value <- ref_database@spectra.info[idx, x]
           database@spectra.info <-
@@ -373,11 +366,11 @@ update_metid_database_info <-
           colnames(database@spectra.info)[ncol(database@spectra.info)] <-
             x
         }
-
+        
         message("Done.")
       }
     }
-
+    
     return(database)
   }
 
@@ -389,26 +382,26 @@ merge_same_source <-
     id <-
       source_system %>%
       dplyr::select(tidyselect::ends_with("ID"))
-
+    
     source <-
       source_system %>%
       dplyr::select(tidyselect::starts_with("From"))
-
+    
     from <-
       grep("From_", colnames(source), value = TRUE)
-
+    
     duplicated_from <-
       from %>%
       stringr::str_extract("^From_[a-zA-Z]{1,20}")
-
+    
     unique_from <-
       duplicated_from[duplicated(duplicated_from)] %>%
       unique()
-
+    
     if (length(unique_from) == 0) {
       return(source_system)
     }
-
+    
     new_source <-
       seq_along(unique_from) %>%
       purrr::map(function(i) {
@@ -422,7 +415,7 @@ merge_same_source <-
             if (length(y) == 0) {
               return(NA)
             }
-
+            
             if (any(y == "Yes")) {
               return("Yes")
             }
@@ -432,15 +425,14 @@ merge_same_source <-
       }) %>%
       dplyr::bind_cols() %>%
       as.data.frame()
-
+    
     colnames(new_source) <- unique_from
-
+    
     remove_idx <-
       which(duplicated_from %in% unique_from)
-
+    
     source <-
-      cbind(source[, -remove_idx],
-            new_source)
+      cbind(source[, -remove_idx], new_source)
     cbind(id, source)
   }
 
@@ -454,37 +446,35 @@ update_metid_database_source_system <-
            by = c("CAS.ID", "HMDB.ID", "KEGG.ID"),
            prefer = c("database", "source_system")) {
     prefer <- match.arg(prefer)
-
+    
     source <-
       source_system %>%
       dplyr::select(tidyselect::starts_with("From_"))
-
+    
     database@spectra.info <-
       database@spectra.info %>%
       as.data.frame()
-
+    
     idx <-
       by %>%
       purrr::map(function(x) {
-        match(database@spectra.info[, x , drop = TRUE],
-              source_system[, x, drop = TRUE],
-              incomparables = NA)
+        match(database@spectra.info[, x , drop = TRUE], source_system[, x, drop = TRUE], incomparables = NA)
       }) %>%
       dplyr::bind_cols()
-
+    
     idx <-
       idx %>%
       keep_one_from_multiple %>%
       as.numeric()
-
+    
     database_source <-
       database@spectra.info %>%
       dplyr::select(tidyselect::starts_with("From"))
-
+    
     if (ncol(database_source) == 0) {
       database_source <- NULL
     }
-
+    
     if (prefer == "database") {
       final_source <-
         data.frame(database_source, source[idx, ])
@@ -492,20 +482,20 @@ update_metid_database_source_system <-
       final_source <-
         data.frame(source[idx, ], database_source)
     }
-
-
+    
+    
     final_source <-
       merge_same_source(final_source)
-
+    
     rownames(final_source) <- NULL
-
+    
     database@spectra.info <-
       database@spectra.info %>%
       dplyr::select(-tidyselect::starts_with("From"))
-
+    
     database@spectra.info <-
       cbind(database@spectra.info, final_source)
-
+    
     return(database)
   }
 
@@ -530,24 +520,22 @@ update_metid_database_source_system <-
 #' @importFrom XML xmlTreeParse xmlToList
 #' @export
 
-read_gpml <- function(file,
-                      only_remain_metabolites = TRUE) {
-
+read_gpml <- function(file, only_remain_metabolites = TRUE) {
   if (!grepl("\\.gpml$", file)[1]) {
     message("Wikipathways Metabolite set information must be a .gpml file")
     return(NULL)
   }
-
+  
   filename <- utils::tail(unlist(strsplit(file, "/")), n = 1)
-
+  
   wikipId <-
     utils::tail(unlist(strsplit(filename, "_")), n = 2)[[1]]
-
+  
   gpml <- XML::xmlTreeParse(file) %>%
     XML::xmlToList()
-
+  
   nms <- names(gpml)
-
+  
   data_node <-
     gpml[nms == "DataNode"] %>%
     purrr::map(function(x) {
@@ -556,22 +544,22 @@ read_gpml <- function(file,
     }) %>%
     do.call(rbind, .) %>%
     as.data.frame()
-
+  
   colnames(data_node) <-
     c("Database", "ID", "TextLabel", "Type")
-
+  
   rownames(data_node) <- NULL
-
-  if(only_remain_metabolites){
+  
+  if (only_remain_metabolites) {
     data_node <-
       data_node %>%
       dplyr::filter(Type == "Metabolite")
   }
-
-  if(nrow(data_node) == 0){
+  
+  if (nrow(data_node) == 0) {
     data_node <- NULL
   }
-
+  
   interaction <-
     gpml[nms == "Interaction"] %>%
     purrr::map(function(x) {
@@ -579,24 +567,23 @@ read_gpml <- function(file,
     }) %>%
     do.call(rbind, .) %>%
     as.data.frame()
-
-  if(nrow(interaction) == 0){
+  
+  if (nrow(interaction) == 0) {
     interaction <- NULL
-  }else{
+  } else{
     colnames(interaction) <-
       c("Database", "ID")
-
+    
     rownames(interaction) <- NULL
-
+    
     interaction <-
       interaction %>%
       dplyr::filter(ID != "") %>%
       dplyr::arrange(Database)
   }
-
-  list(metabolite = data_node,
-       reaction = interaction)
-
+  
+  list(metabolite = data_node, reaction = interaction)
+  
 }
 
 
@@ -619,18 +606,18 @@ text_col <- function(x) {
   if (!rstudioapi::isAvailable()) {
     return(x)
   }
-
+  
   if (!rstudioapi::hasFun("getThemeInfo")) {
     return(x)
   }
-
+  
   theme <- rstudioapi::getThemeInfo()
-
+  
   if (isTRUE(theme$dark))
     crayon::white(x)
   else
     crayon::black(x)
-
+  
 }
 
 #' List all packages in the massdatabase
@@ -647,7 +634,7 @@ massdatabase_packages <- function(include_self = TRUE) {
   parsed <- gsub("^\\s+|\\s+$", "", imports)
   names <-
     vapply(strsplit(parsed, "\\s+"), "[[", 1, FUN.VALUE = character(1))
-
+  
   if (include_self) {
     names <- c(names, "massdatabase")
   }

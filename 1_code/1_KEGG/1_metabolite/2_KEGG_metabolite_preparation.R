@@ -19,7 +19,11 @@ library(tidyverse)
 
 ### load data
 
-load("2_data/KEGG/metabolite/kegg_compound_database")
+
+
+
+
+
 
 dir.create("3_data_analysis/KEGG/metabolite", showWarnings = FALSE)
 setwd("3_data_analysis/KEGG/metabolite")

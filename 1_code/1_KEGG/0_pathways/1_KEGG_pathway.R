@@ -181,6 +181,8 @@ setwd("2_data/KEGG/pathway")
 
 load("kegg_reference_pathway.rda")
 
+
+
 ####specific organism pathways
 ###get the organism list
 organism_list <-
@@ -203,7 +205,7 @@ retry_request <- function(dbentries, retries = 3) {
 
 dir.create("organism_pathways")
 
-for (i in organism_list$organism) {
+for (i in organism_list$organism[8001:9000]) {
 
   print(paste0(i, " in progress"))
 

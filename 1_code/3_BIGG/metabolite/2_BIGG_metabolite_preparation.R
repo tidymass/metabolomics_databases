@@ -9,14 +9,14 @@ source('1_code/100_tools.R')
 ###read data
 library(massdatabase)
 
-bigg_compounds <-
-read_bigg_universal_metabolite(path = "2_data/BIGG/metabolite")
+# bigg_compounds <-
+# read_bigg_universal_metabolite(path = "2_data/BIGG/metabolite")
 
 dir.create("3_data_analysis/BIGG/compound", showWarnings = FALSE)
 setwd("3_data_analysis/BIGG/compound")
 
 ###convert it to metID compound database
-class(bigg_compounds)
+# class(bigg_compounds)
 
 ####source
 ####from_human TRUE FALSE
@@ -44,9 +44,9 @@ class(bigg_compounds)
 #######from_food TRUE FALSE
 #######from_which_food Tomato
 
-convert_bigg_universal2metid(data = bigg_compounds, 
-path = ".", 
-threads = 5)
+# convert_bigg_universal2metid(data = bigg_compounds, 
+# path = ".", 
+# threads = 5)
 
 load("bigg_ms1")
 
