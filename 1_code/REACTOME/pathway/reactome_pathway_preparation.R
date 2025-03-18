@@ -171,6 +171,7 @@ metabolite_list <-
     x <-
       x %>%
       dplyr::rename(HMDB.ID = HMDB_ID, KEGG.ID = KEGG_ID)
+    colnames(x)[1] <- "CHEBI.ID"
     x
   })
 
@@ -192,45 +193,4 @@ reactome_hsa_pathway =
     related_module = list()
   )
 
-
-save(reactome_hsa_pathway, file = "../../../3_data_analysis/REACTOME/reactome_hsa_pathway.rda")
-
-
-
-
-#####reaction
-file_name <-
-  dir(path = "wikipathways-20220410-gpml-Homo_sapiens", full.names = TRUE)
-
-wikipathway_reaction_database <-
-  seq_along(file_name) %>%
-  purrr::map(function(i) {
-    cat(i, " ")
-    read_gpml(file = file_name[i])$reaction
-  }) %>%
-  do.call(rbind, .) %>%
-  as.data.frame()
-
-wikipathway_reaction_database <-
-  wikipathway_reaction_database %>%
-  dplyr::filter(
-    !Database %in% c(
-      "",
-      "IntAct",
-      "KEGG Pathway",
-      "WikiPathways",
-      "XMetDB",
-      "Database",
-      "Wikidata",
-      "SPIKE",
-      "ChEBI",
-      "KEGG Compound",
-      "PATO:0002220",
-      "Uniprot-TrEMBL"
-    )
-  ) %>%
-  dplyr::distinct()
-
-unique(wikipathway_reaction_database$Database)
-
-save(wikipathway_reaction_database, file = "wikipathway_reaction_database")
+save(reactome_hsa_pathway, file = "../../../3_data_analysis/REACTOME/pathway/reactome_hsa_pathway.rda")

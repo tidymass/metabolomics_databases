@@ -5,8 +5,8 @@ rm(list = ls())
 
 library(tidyverse)
 
-load("2_data/HMDB/MS1/hmdb_ms1.rda")
-load("2_data/KEGG/kegg_ms1.rda")
+load("3_data_analysis/HMDB/MS1/hmdb_ms1.rda")
+load("3_data_analysis/KEGG/kegg_ms1.rda")
 
 setwd("2_data/metabolic_network/")
 
@@ -20,13 +20,28 @@ load("reactome_rpair_database_human")
 load("rhea_rpair_database")
 
 dim(kegg_rpair_database_human)
+length(unique(unlist(stringr::str_split(kegg_rpair_database_human$rpair_id, "_"))))
+
 dim(hmdb_rpair_database_human)
+length(unique(unlist(stringr::str_split(hmdb_rpair_database_human$rpair_id, "\\{\\}"))))
+
 dim(bigg_rpair_database_human)
+length(unique(unlist(stringr::str_split(bigg_rpair_database_human$rpair_id, "_"))))
+
 dim(metanetx_rpair_database)
+length(unique(unlist(stringr::str_split(metanetx_rpair_database$rpair_id, "_"))))
+
 dim(modelseed_rpair_database)
+length(unique(unlist(stringr::str_split(modelseed_rpair_database$rpair_id, "_"))))
+
 dim(recon3_rpair_database)
+length(unique(unlist(stringr::str_split(recon3_rpair_database$rpair_id, "_"))))
+
 dim(reactome_rpair_database_human)
+length(unique(unlist(stringr::str_split(reactome_rpair_database_human$rpair_id, "_"))))
+
 dim(rhea_rpair_database)
+length(unique(unlist(stringr::str_split(rhea_rpair_database$rpair_id, "_"))))
 
 kegg_rpair_database_human <-
   kegg_rpair_database_human %>%
@@ -81,6 +96,31 @@ rhea_rpair_database <-
 
 rhea_rpair_database[, colnames(kegg_rpair_database_human)]
 
+######upset plot
+library(ComplexHeatmap)
+lt = list(
+  kegg = kegg_rpair_database_human$rpair_id,
+  hmdb = hmdb_rpair_database_human$rpair_id,
+  bigg = bigg_rpair_database_human$rpair_id,
+  metanetx = metanetx_rpair_database$rpair_id,
+  modelseed = modelseed_rpair_database$rpair_id,
+  recon3 = recon3_rpair_database$rpair_id,
+  reactome = reactome_rpair_database_human$rpair_id,
+  rhea = rhea_rpair_database$rpair_id
+)
+
+m1 = make_comb_mat(lt)
+m1
+UpSet(
+  m1, border = TRUE
+)
+pdf("upset_plot.pdf", width = 10, height = 7)
+UpSet(
+  m1, border = TRUE
+)
+dev.off()
+
+
 metabolic_network_edge <-
   rbind(
     kegg_rpair_database_human,
@@ -113,45 +153,44 @@ temp <-
     if (nrow(x) == 1) {
       return(x)
     }
-
+    
     x$reaction_KEGG_ID <-
       x$reaction_KEGG_ID[!is.na(x$reaction_KEGG_ID)] %>%
       stringr::str_split("\\{\\}") %>%
       unlist() %>%
       unique() %>%
       paste(collapse = "{}")
-
+    
     x$reaction_RHEA_ID <-
       x$reaction_RHEA_ID[!is.na(x$reaction_RHEA_ID)] %>%
       stringr::str_split("\\{\\}") %>%
       unlist() %>%
       unique() %>%
       paste(collapse = "{}")
-
+    
     x$reaction_Enzyme_EC_number <-
       x$reaction_Enzyme_EC_number[!is.na(x$reaction_Enzyme_EC_number)] %>%
       stringr::str_split("\\{\\}") %>%
       unlist() %>%
       unique() %>%
       paste(collapse = "{}")
-
+    
     x$reaction_Enzyme_UNIPROT_ID <-
       x$reaction_Enzyme_UNIPROT_ID[!is.na(x$reaction_Enzyme_UNIPROT_ID)] %>%
       stringr::str_split("\\{\\}") %>%
       unlist() %>%
       unique() %>%
       paste(collapse = "{}")
-
+    
     x$reaction_database <-
       x$reaction_database[!is.na(x$reaction_database)] %>%
       stringr::str_split("\\{\\}") %>%
       unlist() %>%
       unique() %>%
       paste(collapse = "{}")
-
+    
     x %>%
-      dplyr::distinct(rpair_id,
-                      .keep_all = TRUE)
+      dplyr::distinct(rpair_id, .keep_all = TRUE)
   }) %>%
   dplyr::bind_rows()
 
@@ -171,7 +210,7 @@ LAB_ID <-
       from_compound_LAB_ID <-
         metabolic_network_edge$from_compound_KEGG_ID[i]
     }
-
+    
     if (!is.na(metabolic_network_edge$to_compound_HMDB_ID[i])) {
       to_compound_LAB_ID <-
         metabolic_network_edge$to_compound_HMDB_ID[i]
@@ -179,16 +218,14 @@ LAB_ID <-
       to_compound_LAB_ID <-
         metabolic_network_edge$to_compound_KEGG_ID[i]
     }
-
-    data.frame(from_compound_LAB_ID,
-               to_compound_LAB_ID)
-
+    
+    data.frame(from_compound_LAB_ID, to_compound_LAB_ID)
+    
   }) %>%
   dplyr::bind_rows()
 
 metabolic_network_edge <-
-  data.frame(metabolic_network_edge,
-             LAB_ID) %>%
+  data.frame(metabolic_network_edge, LAB_ID) %>%
   tibble::as_tibble() %>%
   dplyr::select(
     rpair_id,
@@ -237,14 +274,12 @@ temp2 <-
 
 
 temp <-
-  rbind(temp1,
-        temp2) %>%
+  rbind(temp1, temp2) %>%
   dplyr::distinct(name, .keep_all = TRUE)
 
 temp <-
   temp %>%
-  dplyr::mutate(nchar1 = nchar(Formula.x),
-                nchar2 = nchar(Formula.y)) %>%
+  dplyr::mutate(nchar1 = nchar(Formula.x), nchar2 = nchar(Formula.y)) %>%
   dplyr::arrange(nchar1, nchar2) %>%
   as.data.frame()
 
@@ -347,8 +382,7 @@ high_degree_name <-
 
 high_degree_name
 
-hmdb_ms1@spectra.info[match(high_degree_name, hmdb_ms1@spectra.info$HMDB.ID),
-                      c("HMDB.ID", "KEGG.ID", "Compound.name")]
+hmdb_ms1@spectra.info[match(high_degree_name, hmdb_ms1@spectra.info$HMDB.ID), c("HMDB.ID", "KEGG.ID", "Compound.name")]
 
 # get_remove_index <-
 #   function(rpair_database,
@@ -412,8 +446,7 @@ library(tidygraph)
 
 metabolic_network_edge <-
   metabolic_network_edge %>%
-  dplyr::mutate(from = from_compound_LAB_ID,
-                to = to_compound_LAB_ID) %>%
+  dplyr::mutate(from = from_compound_LAB_ID, to = to_compound_LAB_ID) %>%
   dplyr::select(from, to, dplyr::everything())
 
 metabolic_network_node <-
@@ -428,9 +461,10 @@ metabolic_network <-
   activate(what = "nodes") %>%
   dplyr::mutate(degree = tidygraph::centrality_degree())
 
-save(metabolic_network_edge, file = "metabolic_network_edge")
-save(metabolic_network_node, file = "metabolic_network_node")
-save(metabolic_network, file = "metabolic_network")
+# save(metabolic_network_edge, file = "metabolic_network_edge.rda")
+# save(metabolic_network_node, file = "metabolic_network_node.rda")
+# save(metabolic_network, file = "metabolic_network.rda")
+load("metabolic_network.rda")
 
 #####visulization
 library(ggraph)
@@ -447,7 +481,7 @@ edge_data <-
   as.data.frame() %>%
   tibble::as_tibble()
 
-node_data[which(node_data$degree == 1),]
+node_data[which(node_data$degree == 1), ]
 
 # metabolic_network_edge[which(metabolic_network_edge$from == "HMDB0000538"),]
 # which(metabolic_network_edge$from == "HMDB0001341")
@@ -464,6 +498,8 @@ plot <-
   geom_edge_link0(color = "black") +
   geom_node_point(size = 1) +
   ggraph::theme_graph()
+
+plot
 
 #####new metabolic network with enzyme
 metabolic_network_edge %>%
@@ -491,15 +527,14 @@ metabolic_network_edge_with_protein <-
           reaction_KEGG_ID,
           reaction_RHEA_ID
         ) %>%
-        dplyr::mutate(from_class = "protein",
-                      to_class = "metabolite")
+        dplyr::mutate(from_class = "protein", to_class = "metabolite")
       return(x)
     }
-
+    
     enzyme <-
       stringr::str_split(metabolic_network_edge$reaction_Enzyme_UNIPROT_ID[i],
                          "\\{\\}")[[1]]
-
+    
     lapply(enzyme, function(x) {
       rbind(
         data.frame(
@@ -532,8 +567,7 @@ metabolic_network_edge_with_protein <-
   }) %>%
   dplyr::bind_rows()
 
-save(metabolic_network_edge_with_protein, file = "metabolic_network_edge_with_protein")
-
+save(metabolic_network_edge_with_protein, file = "metabolic_network_edge_with_protein.rda")
 
 metabolic_network_node_with_protein <-
   data.frame(metabolic_network_node,
@@ -563,11 +597,11 @@ metabolic_network_node_with_protein <-
         metabolic_network_node_with_protein2) %>%
   tibble::as_tibble()
 
-save(metabolic_network_node_with_protein, file = "metabolic_network_node_with_protein")
+save(metabolic_network_node_with_protein, file = "metabolic_network_node_with_protein.rda")
 
 metabolic_network_with_protein <-
   tidygraph::tbl_graph(nodes = metabolic_network_node_with_protein,
                        edges = metabolic_network_edge_with_protein,
                        directed = FALSE)
 
-save(metabolic_network_with_protein, file = "metabolic_network_with_protein")
+save(metabolic_network_with_protein, file = "metabolic_network_with_protein.rda")
